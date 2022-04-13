@@ -6,11 +6,11 @@ const schema = new Schema({
         type: String,
         required: true,
         trim: true,
-        unique: true,
+        unique: [true, "Title already exists"],
     },
     slug: {
         type: String,
-        required: true,
+        required: [true, "Slug is required"],
         trim: true,
         index: true,
         unique: true,

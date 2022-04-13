@@ -1,5 +1,13 @@
+const mongoose = require('mongoose');
+const Manga = mongoose.model('Manga');
+
 exports.post = (req, res, next) => {
-  res.status(201).send(req.body);
+  var manga = new Manga(req.body);
+  manga.save().then(x => {
+    res.status(201).send({message: 'Manga created!'});
+  }).catch(e => {
+    res.status(400).send({message: 'Error while creating manga', data: e});
+  });
 };
 
 exports.put = (req, res, next) => {

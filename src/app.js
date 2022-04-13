@@ -10,9 +10,12 @@ const router = express.Router();
 //Conexão com o banco de dados (MongoDB)
 mongoose.connect(process.env.DB_CONNECTION.toString());
 
+//Carregando models
+const Manga = require('./models/manga');
+
 //Carregando rotas
 const indexRoute = require('./routes/indexRouter');
-const mangaRoute = require('./routes/manga');
+const mangaRoute = require('./routes/mangaRouter');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
