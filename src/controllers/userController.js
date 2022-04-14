@@ -1,8 +1,10 @@
 const repository = require('../repositories/userRepository');
+const emailService = require('../services/emailService');
 
 exports.post = async(req, res, next) => {
   try {
-    await repository.create(req.body)
+    await repository.create(req.body);
+    emailService.send(req.body.email, ' [MyMangaList] - Bem-vindo(a) ao site ', process.env.EMAIL_TEMPLATE_WELCOME.replace('{0}', req.body.userName));
     res.status(201).send({ message: 'User created!' });
   } catch (e) {
     res.status(500).send({ message: 'Error while creating user', data: e });

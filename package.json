@@ -16,7 +16,8 @@
     "express": "^4.17.3",
     "http": "0.0.1-security",
     "md5": "^2.3.0",
-    "mongoose": "^6.2.10"
+    "mongoose": "^6.2.10",
+    "sendgrid": "^2.0.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.0",
