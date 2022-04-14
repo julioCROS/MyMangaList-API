@@ -2,38 +2,42 @@ const mongoose = require('mongoose');
 const Manga = mongoose.model('Manga');
 const slug = require('../utils/slugTitle');
 
-exports.get = () => {
-  return Manga.find();
+exports.get = async() => {
+  const res = await Manga.find({});
+  return res;
 };
 
-exports.getBySlug = (slug) => {
-  return Manga.findOne({ 
+exports.getBySlug = async(slug) => {
+  const res = await Manga.findOne({ 
     slug: slug,
   });
+  return res;
 };
 
-exports.getById = (id) => {
-  return Manga.findById(id);
+exports.getById = async(id) => {
+  const res = await Manga.findById(id);
+  return res;
 };
 
-exports.getByGenres = (genre) => {
-  return Manga.find({
+exports.getByGenres = async(genre) => {
+  const res = await Manga.find({
     genres: genre
   });
+  return res;
 };
 
-exports.create = (data) => {
+exports.create = async(data) => {
   let manga = new Manga(data);
-  manga.slug = slug.slugTitle(newManga.title);
-  return manga.save();
+  manga.slug = slug.slugTitle(data.title);
+  await manga.save();
 };
 
-exports.update = (id, data) => {
-  return Manga.findByIdAndUpdate(id, {
-    $set: data
+exports.update = async(id, data) => {
+  await Manga.findByIdAndUpdate(id, {
+    $set: data,
   });
 };
 
-exports.delete = (id) => {
-  return Manga.findByIdAndRemove(id);
+exports.delete = async(id) => {
+  await Manga.findByIdAndRemove(id);
 };
