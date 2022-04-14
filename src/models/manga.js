@@ -10,7 +10,7 @@ const schema = new Schema({
     },
     slug: {
         type: String,
-        required: false,
+        required: true,
         trim: true,
         index: true,
         unique: true,
