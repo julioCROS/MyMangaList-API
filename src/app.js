@@ -12,16 +12,19 @@ mongoose.connect(process.env.DB_CONNECTION.toString());
 
 //Carregando models
 const Manga = require('./models/manga');
+const User = require('./models/user');
 
 //Carregando rotas
 const indexRoute = require('./routes/indexRouter');
 const mangaRoute = require('./routes/mangaRouter');
+const userRoute = require('./routes/userRouter');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', indexRoute);
 app.use('/mangas', mangaRoute);
+app.use('/users', userRoute);
 
 module.exports = app;
 
