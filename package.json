@@ -1,13 +1,13 @@
 {
-  "name": "node-str",
+  "name": "MyMangaList-API",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A basic API made using NodeJs with MongoDB for CRUD users and mangas, for an online mangas collection.",
+  "main": "bin/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon bin/server.js"
   },
-  "keywords": [],
+  "keywords": ["nodejs", "javascript", "api", "anime", "mangas"],
   "author": "julioCROS",
   "license": "ISC",
   "dependencies": {
