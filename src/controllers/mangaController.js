@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-const Manga = mongoose.model('Manga');
 const repository = require('../repositories/mangaRepository');
 
 exports.get = async(req, res, next) => {
@@ -23,6 +21,7 @@ exports.getBySlug = async(req, res, next) => {
 exports.getById = async(req, res, next) => {
   try{
     var data = await repository.getById(req.params.id);
+    res.status(200).send(data);
   } catch(e){
     res.status(500).send({message: 'Error while getting manga', data: e});
   }
@@ -31,6 +30,7 @@ exports.getById = async(req, res, next) => {
 exports.getByGenres = async(req, res, next) => {
   try{
     var data = await repository.getByGenres(req.params.genres);
+    req.status(200).send(data);
   } catch(e){
     res.status(500).send({message: 'Error while getting manga', data: e});
   }
