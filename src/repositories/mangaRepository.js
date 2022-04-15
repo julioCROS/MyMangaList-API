@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Manga = mongoose.model('Manga');
+const imgbbUploader = require('imgbb-uploader');
 const slug = require('../utils/slugTitle');
+const dotevn = require('dotenv');
+dotevn.config();
 
 exports.get = async() => {
   const res = await Manga.find({});
@@ -27,9 +30,27 @@ exports.getByGenres = async(genre) => {
 };
 
 exports.create = async(data) => {
-  let manga = new Manga(data);
-  manga.slug = slug.slugTitle(data.title);
-  await manga.save();
+  if(data.cover !== undefined){
+    const imgbbOptions = {
+      apiKey: process.env.IMGBB_API_KEY,
+      imagePath: data.cover,
+      name: slug.slugTitle(data.title) + Date.now(),
+    }
+
+    imgbbUploader(imgbbOptions)
+    .then(async (response) => {
+      let manga = new Manga(data);
+      manga.cover = response.url;
+      manga.slug = slug.slugTitle(data.title);
+      await manga.save();
+    })
+    .catch((error) => console.error(error));
+  } else{
+    let manga = new Manga(data);
+    manga.cover = 'https://i.ibb.co/YRz2XVM/my-Manga-List-default-manga-cover.png';
+    manga.slug = slug.slugTitle(data.title);
+    await manga.save();
+  }
 };
 
 exports.update = async(id, data) => {

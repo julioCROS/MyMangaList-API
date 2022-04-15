@@ -38,10 +38,10 @@ exports.getByGenres = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
   try{
-    await repository.create(req.body)
+    await repository.create(req.body);
     res.status(201).send({message: 'Manga created!'});
   } catch(e){
-    res.status(500).send({message: 'Error while creating manga', data: e});
+    res.status(500).send({message: 'Error while creating manga --->  ' + e});
   }
 };
 

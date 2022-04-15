@@ -7,7 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon bin/server.js"
   },
-  "keywords": ["nodejs", "javascript", "api", "anime", "mangas"],
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "api",
+    "anime",
+    "mangas"
+  ],
   "author": "julioCROS",
   "license": "ISC",
   "dependencies": {
@@ -15,6 +21,7 @@
     "debug": "^4.3.4",
     "express": "^4.17.3",
     "http": "0.0.1-security",
+    "imgbb-uploader": "^1.3.5",
     "md5": "^2.3.0",
     "mongoose": "^6.2.10",
     "sendgrid": "^2.0.0"

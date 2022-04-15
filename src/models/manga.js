@@ -50,12 +50,12 @@ const schema = new Schema({
     }],
     read_link:{
         type: String,
-        required: true,
+        required: false,
         trim: false,
     },
     buy_link:{
         type: String,
-        required: true,
+        required: false,
         trim: false,
     },
 });
