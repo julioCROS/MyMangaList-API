@@ -9,6 +9,6 @@ router.get('/id/:id', controller.getById);
 router.get('/genres/:genres', controller.getByGenres);
 router.post('/', authService.authorize, controller.post);
 router.put('/:id', authService.authorize, controller.put);
-router.delete('/:id', authService.authorize, controller.delete);
+router.delete('/:id', authService.isAdmin, controller.delete);
 
 module.exports = router;

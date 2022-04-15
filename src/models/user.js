@@ -10,8 +10,8 @@ const schema =  new Schema({
         length: {
             min: 3,
             max: 20,
-            message: "UserName must be between 3 and 20 characters"
-        }
+            message: "UserName must be between 3 and 20 characters",
+        },        
     },
     email: {
         type: String,
@@ -29,6 +29,11 @@ const schema =  new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Manga',
         default: [],
+    }],
+    roles: [{
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user',
     }],
 });
 

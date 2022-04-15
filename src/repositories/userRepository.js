@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 exports.create = async(data) => {
+  data.roles = ['user'];
   data.password = md5(data.password + process.env.SALT_KEY);
   await User.create(data);
 }

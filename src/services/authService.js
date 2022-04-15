@@ -28,3 +28,29 @@ exports.authorize = async (req, res, next) => {
     });
   }
 }
+
+exports.isAdmin = async (req, res, next) => {
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  
+  if(!token){
+    return res.status(401).send({
+      message: 'Acesso restrito.'
+    });
+  } else {
+    jwt.verify(token, process.env.SALT_KEY, function(err, decoded) {
+      if(err){
+        return res.status(401).send({
+          message: 'Token inválido.'
+        });
+      } else {
+        if(decoded.roles.includes('admin')){
+          next();
+        } else {
+          return res.status(403).send({
+            message: 'Acesso restrito. Somente administradores.'
+          });
+        }
+      }
+    });
+  } 
+}

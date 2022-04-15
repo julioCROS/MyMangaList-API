@@ -54,7 +54,7 @@ exports.authenticate = async(req, res, next) => {
 
     if(!user){
       res.status(401).send({
-         message: 'User or password invalid: '
+         message: 'User or password invalid'
       });
       return;
     }
@@ -62,14 +62,16 @@ exports.authenticate = async(req, res, next) => {
     const token = await authService.generateToken({ 
       id: user._id,
       email: user.email, 
-      userName: user.userName 
+      userName: user.userName,
+      roles: user.roles
     });
 
     res.status(201).send({
       token: token,
       data: {
         email: user.email,
-        userName: user.userName
+        userName: user.userName,
+        roles: user.roles
       }
     });
 
@@ -95,14 +97,16 @@ exports.refreshToken = async(req, res, next) => {
     const tokenData = {
       id: user._id,
       email: user.email,
-      userName: user.userName
+      userName: user.userName,
+      roles: user.roles
     }
 
     res.status(201).send({
       token: token,
       data: {
         email: user.email,
-        userName: user.userName
+        userName: user.userName,
+        roles: user.roles
       }
     });
 
