@@ -1,4 +1,3 @@
-const decodeToken = require('../utils/decodeToken');
 const repository = require('../repositories/mangaRepository');
 
 exports.get = async(req, res, next) => {
@@ -6,7 +5,7 @@ exports.get = async(req, res, next) => {
     let data = await repository.get()
     res.status(200).send(data)
   }catch(e){
-    res.status(500).send({message: 'Error while getting manga', data: e});
+    res.status(500).send({message: 'Error while getting manga: ' + e});
   }  
 };
 
@@ -15,7 +14,7 @@ exports.getBySlug = async(req, res, next) => {
     var data = await repository.getBySlug(req.params.slug);
     res.status(200).send(data);
   } catch (e) {
-    res.status(500).send({ message: 'Error while getting manga', data: e });
+    res.status(500).send({message: 'Error while getting manga: ' + e});
   }
 };
 
@@ -24,7 +23,7 @@ exports.getById = async(req, res, next) => {
     var data = await repository.getById(req.params.id);
     res.status(200).send(data);
   } catch(e){
-    res.status(500).send({message: 'Error while getting manga', data: e});
+    res.status(500).send({message: 'Error while getting manga: ' + e});
   }
 };
 
@@ -33,13 +32,15 @@ exports.getByGenres = async(req, res, next) => {
     var data = await repository.getByGenres(req.params.genres);
     req.status(200).send(data);
   } catch(e){
-    res.status(500).send({message: 'Error while getting manga', data: e});
+    res.status(500).send({message: 'Error while getting manga: ' + e});
   }
 };
 
 exports.post = async(req, res, next) => {
   try{
-    const data = await decodeToken.decode(req); 
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const data = await authService.decodeToken(token);
+    
     req.body.userCreator = data.id;
     await repository.create(req.body);
     res.status(201).send({message: 'Manga created!'});

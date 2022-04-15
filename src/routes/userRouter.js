@@ -9,5 +9,6 @@ router.post('/', controller.post);
 router.put('/:id', authService.authorize, controller.put);
 router.delete('/:id', authService.authorize, controller.delete);
 router.post('/authenticate', controller.authenticate);
+router.post('/refresh-token', authService.authorize, controller.refreshToken);
 
 module.exports = router;

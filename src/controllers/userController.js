@@ -8,7 +8,7 @@ exports.post = async(req, res, next) => {
     emailService.send(req.body.email, ' [MyMangaList] - Bem-vindo(a) ao site ', process.env.EMAIL_TEMPLATE_WELCOME.replace('{0}', req.body.userName));
     res.status(201).send({ message: 'User created!' });
   } catch (e) {
-    res.status(500).send({ message: 'Error while creating user', data: e });
+    res.status(500).send({ message: 'Error while creating user:' + e });
   }
 }
 
@@ -17,7 +17,7 @@ exports.put = async(req, res, next) => {
     await repository.update(req.params.id, req.body)
     res.status(201).send({ message: 'User updated!' });
   } catch (e) {
-    res.status(500).send({ message: 'Error while updating user', data: e });
+    res.status(500).send({ message: 'Error while updating user: ' + e });
   }
 }
 
@@ -26,7 +26,7 @@ exports.delete = async(req, res, next) => {
     await repository.delete(req.params.id)
     res.status(201).send({ message: 'User deleted!' });
   } catch (e) {
-    res.status(500).send({ message: 'Error while deleting user', data: e });
+    res.status(500).send({ message: 'Error while deleting user: ' + e });
   }
 }
 
@@ -35,7 +35,7 @@ exports.get = async(req, res, next) => {
     let data = await repository.get()
     res.status(200).send(data)
   } catch (e) {
-    res.status(500).send({ message: 'Error while getting user', data: e });
+    res.status(500).send({ message: 'Error while getting user: ' + e });
   }
 }
 
@@ -44,7 +44,7 @@ exports.getById = async(req, res, next) => {
     let data = await repository.getById(req.params.id)
     res.status(200).send(data)
   } catch (e) {
-    res.status(500).send({ message: 'Error while getting user', data: e });
+    res.status(500).send({ message: 'Error while getting user: ' + e });
   }
 }
 
@@ -54,7 +54,7 @@ exports.authenticate = async(req, res, next) => {
 
     if(!user){
       res.status(401).send({
-         message: 'User or password invalid: ' + req.body.email + ' - ' + req.body.password 
+         message: 'User or password invalid: '
       });
       return;
     }
@@ -74,6 +74,39 @@ exports.authenticate = async(req, res, next) => {
     });
 
   } catch (e) {
-    res.status(500).send({ message: 'Error while authenticating user', data: e });
+    res.status(500).send({ message: 'Error while authenticating user: ' + e });
+  }
+}
+
+
+exports.refreshToken = async(req, res, next) => {
+  try {
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const data = await authService.decodeToken(token);
+    const user = await repository.getById(data.id);
+
+    if(!user){
+      res.status(401).send({
+         message: 'User not found'
+      });
+      return;
+    }
+
+    const tokenData = {
+      id: user._id,
+      email: user.email,
+      userName: user.userName
+    }
+
+    res.status(201).send({
+      token: token,
+      data: {
+        email: user.email,
+        userName: user.userName
+      }
+    });
+
+  } catch (e) {
+    res.status(500).send({ message: 'Error while token refresh: ' + e });
   }
 }
