@@ -8,5 +8,6 @@ router.get('/id/:id', authService.authorize, controller.getById);
 router.post('/', controller.post);
 router.put('/:id', authService.authorize, controller.put);
 router.delete('/:id', authService.authorize, controller.delete);
+router.post('/authenticate', controller.authenticate);
 
 module.exports = router;

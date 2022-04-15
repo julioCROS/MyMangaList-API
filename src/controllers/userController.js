@@ -1,5 +1,6 @@
 const repository = require('../repositories/userRepository');
 const emailService = require('../services/emailService');
+const authService = require('../services/authService');
 
 exports.post = async(req, res, next) => {
   try {
@@ -44,5 +45,33 @@ exports.getById = async(req, res, next) => {
     res.status(200).send(data)
   } catch (e) {
     res.status(500).send({ message: 'Error while getting user', data: e });
+  }
+}
+
+exports.authenticate = async(req, res, next) => {
+  try {
+    const user = await repository.authenticate(req.body);
+    const token = await authService.generateToken({ 
+      email: req.body.email, 
+      userName: req.body.userName 
+    });
+
+    if(!user){
+      res.status(401).send({
+         message: 'User or password invalid.' 
+      });
+      return;
+    }
+    
+    res.status(201).send({
+      token: token,
+      data: {
+        email: req.body.email,
+        userName: req.body.userName
+      }
+    });
+
+  } catch (e) {
+    res.status(500).send({ message: 'Error while authenticating user', data: e });
   }
 }

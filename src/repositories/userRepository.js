@@ -27,3 +27,11 @@ exports.getById = async(id) => {
   return res;
 }
 
+exports.authenticate = async (data) => {
+  const user = await User.findOne({
+    email: data.email,
+    password: md5(data.password + process.env.SALT_KEY)
+  });
+  return user;
+}
+
