@@ -58,6 +58,11 @@ const schema = new Schema({
         required: false,
         trim: false,
     },
+    userCreator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
 });
 
 module.exports = mongoose.model('Manga', schema);

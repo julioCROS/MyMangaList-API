@@ -1,3 +1,4 @@
+const decodeToken = require('../utils/decodeToken');
 const repository = require('../repositories/mangaRepository');
 
 exports.get = async(req, res, next) => {
@@ -38,10 +39,12 @@ exports.getByGenres = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
   try{
+    const data = await decodeToken.decode(req); 
+    req.body.userCreator = data.id;
     await repository.create(req.body);
     res.status(201).send({message: 'Manga created!'});
   } catch(e){
-    res.status(500).send({message: 'Error while creating manga --->  ' + e});
+    res.status(500).send({message: 'Error while creating manga: ' + e});
   }
 };
 
@@ -50,7 +53,7 @@ exports.put = async(req, res, next) => {
     await reposity.update(req.params.id, req.body)
     res.status(201).send({message: 'Manga updated!'});
   } catch(e){
-    res.status(500).send({message: 'Error while updating manga', data: e});
+    res.status(500).send({message: 'Error while updating manga: ' + e});
   }
 };
 
@@ -59,6 +62,6 @@ exports.delete = async(req, res, next) => {
     await repository.delete(req.params.id)
     res.status(201).send({message: 'Manga deleted!'});
   } catch(e){
-    res.status(500).send({message: 'Error while deleting manga', data: e});
+    res.status(500).send({message: 'Error while deleting manga: ' + e});
   }
 };

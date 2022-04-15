@@ -51,23 +51,25 @@ exports.getById = async(req, res, next) => {
 exports.authenticate = async(req, res, next) => {
   try {
     const user = await repository.authenticate(req.body);
-    const token = await authService.generateToken({ 
-      email: req.body.email, 
-      userName: req.body.userName 
-    });
 
     if(!user){
       res.status(401).send({
-         message: 'User or password invalid.' 
+         message: 'User or password invalid: ' + req.body.email + ' - ' + req.body.password 
       });
       return;
     }
-    
+
+    const token = await authService.generateToken({ 
+      id: user._id,
+      email: user.email, 
+      userName: user.userName 
+    });
+
     res.status(201).send({
       token: token,
       data: {
-        email: req.body.email,
-        userName: req.body.userName
+        email: user.email,
+        userName: user.userName
       }
     });
 
