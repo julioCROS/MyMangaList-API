@@ -1,13 +1,31 @@
+const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 dotenv.config();
 
-let sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
+var transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_SERVICE,
+  port: process.env.EMAIL_PORT,
+  secure: true,
+  auth: {
+    user: process.env.USER,
+    pass: process.env.PASS
+  }
+});
+
 
 exports.send = async (to, subject, html) => {
-  sendgrid.send({
+  var mailOptions = {
+    from: process.env.USER,
     to: to,
-    from: process.env.EMAIL_FROM,
     subject: subject,
     html: html
+  };  
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
   });
 } 
