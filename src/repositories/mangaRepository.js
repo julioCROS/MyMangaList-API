@@ -30,7 +30,8 @@ exports.getByGenres = async(genre) => {
 };
 
 exports.create = async(data) => {
-  if(data.cover !== undefined){
+  const defaultCover = 'https://i.ibb.co/wgCfP2Q/my-Manga-List-default-manga-cover.png';
+  if(data.cover !== defaultCover){
     const imgbbOptions = {
       apiKey: process.env.IMGBB_API_KEY,
       imagePath: data.cover,
@@ -47,7 +48,6 @@ exports.create = async(data) => {
     .catch((error) => console.error(error));
   } else{
     let manga = new Manga(data);
-    manga.cover = 'https://i.ibb.co/YRz2XVM/my-Manga-List-default-manga-cover.png';
     manga.slug = slug.slugTitle(data.title);
     await manga.save();
   }

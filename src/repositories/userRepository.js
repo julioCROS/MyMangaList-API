@@ -5,9 +5,27 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 exports.create = async(data) => {
-  data.roles = ['user'];
-  data.password = md5(data.password + process.env.SALT_KEY);
-  await User.create(data);
+  const defaultProfilePicture = 'https://i.ibb.co/nwfMnMC/my-Manga-List-default-user-profile-pic.png';
+  if(data.profilePicture !== defaultCover){
+    const imgbbOptions = {
+      apiKey: process.env.IMGBB_API_KEY,
+      imagePath: data.profilePicture,
+      name: slug.slugTitle(data.title) + Date.now(),
+    }
+
+    imgbbUploader(imgbbOptions)
+    .then(async (response) => {
+      data.roles = ['user'];
+      data.profilePicture = response.url;
+      data.password = md5(data.password + process.env.SALT_KEY);
+      await User.create(data);
+    })
+    .catch((error) => console.error(error));
+  } else{
+    data.roles = ['user'];
+    data.password = md5(data.password + process.env.SALT_KEY);
+    await User.create(data);
+  }
 }
 
 exports.update = async(id, data) => {

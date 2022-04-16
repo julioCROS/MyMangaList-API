@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema =  new Schema({
+    profilePicture: {
+        type: String,
+        required: false,
+        default: 'https://i.ibb.co/nwfMnMC/my-Manga-List-default-user-profile-pic.png',
+    },
     userName: {
         type: String,
         required: true,

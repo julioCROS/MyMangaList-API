@@ -43,6 +43,7 @@ const schema = new Schema({
         type: String,
         required: true,
         trim: true,
+        default: 'https://i.ibb.co/wgCfP2Q/my-Manga-List-default-manga-cover.png',
     },
     genres: [{
         type: String,
