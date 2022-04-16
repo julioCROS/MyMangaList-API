@@ -32,6 +32,7 @@ exports.authorize = async (req, res, next) => {
 exports.isAdmin = async (req, res, next) => {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   
+  
   if(!token){
     return res.status(401).send({
       message: 'Acesso restrito.'
@@ -43,7 +44,7 @@ exports.isAdmin = async (req, res, next) => {
           message: 'Token inválido.'
         });
       } else {
-        if(decoded.roles.includes('admin')){
+        if(decoded.roles.indexOf('admin') > -1){
           next();
         } else {
           return res.status(403).send({
