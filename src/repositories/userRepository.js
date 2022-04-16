@@ -1,3 +1,5 @@
+const slug = require('../utils/slugTitle');
+const imgbbUploader = require('imgbb-uploader');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const md5 = require('md5');
@@ -6,11 +8,14 @@ dotenv.config();
 
 exports.create = async(data) => {
   const defaultProfilePicture = 'https://i.ibb.co/nwfMnMC/my-Manga-List-default-user-profile-pic.png';
-  if(data.profilePicture !== defaultCover){
+  if(data.profilePicture == undefined){
+    data.profilePicture = defaultProfilePicture;
+  }
+  if(data.profilePicture !== defaultProfilePicture){
     const imgbbOptions = {
       apiKey: process.env.IMGBB_API_KEY,
       imagePath: data.profilePicture,
-      name: slug.slugTitle(data.title) + Date.now(),
+      name: slug.slugTitle(data.userName) + Date.now(),
     }
 
     imgbbUploader(imgbbOptions)
@@ -29,7 +34,27 @@ exports.create = async(data) => {
 }
 
 exports.update = async(id, data) => {
-  await User.findByIdAndUpdate(id, data);
+  const user = await User.findById(id);
+  if(user.profilePicture != data.profilePicture){
+    const imgbbOptions = {
+      apiKey: process.env.IMGBB_API_KEY,
+      imagePath: data.profilePicture,
+      name: slug.slugTitle(data.userName) + Date.now(),
+    }
+
+    imgbbUploader(imgbbOptions)
+    .then(async (response) => {
+      data.profilePicture = response.url;
+      await User.findByIdAndUpdate(id, {
+        $set: data,
+      });
+    })
+    .catch((error) => console.error(error));
+  } else {
+    await User.findByIdAndUpdate(id, {
+      $set: data,
+    });
+  }
 }
 
 exports.delete = async(id) => {

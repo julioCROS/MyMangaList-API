@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const schema =  new Schema({
     profilePicture: {
         type: String,
-        required: false,
+        required: true,
         default: 'https://i.ibb.co/nwfMnMC/my-Manga-List-default-user-profile-pic.png',
     },
     userName: {

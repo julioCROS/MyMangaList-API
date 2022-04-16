@@ -31,6 +31,9 @@ exports.getByGenres = async(genre) => {
 
 exports.create = async(data) => {
   const defaultCover = 'https://i.ibb.co/wgCfP2Q/my-Manga-List-default-manga-cover.png';
+  if(data.cover == undefined){
+    data.cover = defaultCover;
+  }
   if(data.cover !== defaultCover){
     const imgbbOptions = {
       apiKey: process.env.IMGBB_API_KEY,
@@ -54,9 +57,27 @@ exports.create = async(data) => {
 };
 
 exports.update = async(id, data) => {
-  await Manga.findByIdAndUpdate(id, {
-    $set: data,
-  });
+  const manga = await Manga.findById(id);
+  if(manga.cover != data.cover){
+    const imgbbOptions = {
+      apiKey: process.env.IMGBB_API_KEY,
+      imagePath: data.cover,
+      name: slug.slugTitle(data.title) + Date.now(),
+    }
+
+    imgbbUploader(imgbbOptions)
+    .then(async (response) => {
+      data.cover = response.url;
+      await Manga.findByIdAndUpdate(id, {
+        $set: data,
+      });
+    })
+    .catch((error) => console.error(error));
+  } else {
+    await Manga.findByIdAndUpdate(id, {
+      $set: data,
+    });
+  }
 };
 
 exports.delete = async(id) => {

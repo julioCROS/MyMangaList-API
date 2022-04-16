@@ -1,6 +1,8 @@
 const repository = require('../repositories/userRepository');
 const emailService = require('../services/emailService');
 const authService = require('../services/authService');
+const dotenv = require('dotenv');
+dotenv.config();
 
 exports.post = async(req, res, next) => {
   try {

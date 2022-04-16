@@ -1,4 +1,5 @@
 const repository = require('../repositories/mangaRepository');
+const authService = require('../services/authService');
 
 exports.get = async(req, res, next) => {
   try{
@@ -51,7 +52,7 @@ exports.post = async(req, res, next) => {
 
 exports.put = async(req, res, next) => {
   try{
-    await reposity.update(req.params.id, req.body)
+    await repository.update(req.params.id, req.body)
     res.status(201).send({message: 'Manga updated!'});
   } catch(e){
     res.status(500).send({message: 'Error while updating manga: ' + e});
